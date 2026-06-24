@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Arcade | Premium Unblocked Games Index</title>
+    <style>
+        /* Modern Design Tokens & Color Palette */
+        :root {
+            --bg-main: #0b0f19;
+            --bg-surface: #131a2c;
+            --bg-card: #1e2640;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --accent: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --sidebar-width: 260px;
+            --radius-lg: 12px;
+            --radius-md: 8px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* App Layout Wrapper */
+        .app-layout {
+            display: flex;
+            width: 100%;
+        }
+
+        /* Sidebar Navigation Component */
+        aside {
+            width: var(--sidebar-width);
+            background-color: var(--bg-surface);
+            border-right: 1px solid #24304f;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 10;
+        }
+
+        .brand {
+            padding: 2rem 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid #24304f;
+        }
+
+        .brand span {
+            color: var(--primary);
+        }
+
+        .nav-menu {
+            padding: 1.5rem 1rem;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .nav-item:hover, .nav-item.active {
+            color: var(--text-main);
+            background-color: var(--bg-card);
+        }
+
+        .nav-item.active {
+            border-left: 4px solid var(--primary);
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        /* Main Content Viewport */
+        main {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Search & Dashboard Control Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            gap: 2rem;
+        }
+
+        .search-bar {
+            position: relative;
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            background-color: var(--bg-surface);
+            border: 1px solid #24304f;
+            border-radius: var(--radius-md);
+            color: var(--text-main);
+            outline: none;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .search-bar input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .search-bar::before {
+            content: "🔍";
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.9rem;
+            opacity: 0.6;
+        }
+
+        .stats-counter {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            background: var(--bg-surface);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid #24304f;
+        }
+
+        /* Game Matrix Grid Component */
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 2rem;
+            flex-grow: 1;
+        }
+
+        .game-card {
+            background-color: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid #24304f;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .game-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--primary);
+            box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-hero {
+            height: 150px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            position: relative;
+            user-select: none;
+        }
+
+        .game-tag {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background-color: rgba(11, 15, 25, 0.8);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .game-body {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .game-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .game-description {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 1.25rem;
+            flex-grow: 1;
+        }
+
+        .game-action {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .game-action:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Frame Screen Viewer Modal Components */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(7, 10, 18, 0.95);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .theater-stage {
+            width: 90%;
+            max-width: 1024px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .stage-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stage-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .stage-controls {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .control-btn {
+            background-color: var(--bg-surface);
+            border: 1px solid #24304f;
+            color: var(--text-main);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .control-btn:hover {
+            background-color: var(--bg-card);
+            border-color: var(--text-muted);
+        }
+
+        .control-btn.close {
+            background-color: #ef4444;
+            border-color: #ef4444;
+        }
+
+        .control-btn.close:hover {
+            background-color: #dc2626;
+        }
+
+        .screen-container {
+            width: 100%;
+            height: 70vh;
+            background-color: #000;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid #24304f;
+            position: relative;
+        }
+
+        .screen-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Frame Loader Animation UI */
+        .frame-loader {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-main);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            z-index: 2;
+            transition: opacity 0.3s ease;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(59, 130, 246, 0.1);
+            border-left-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Breakpoint Matrix */
+        @media (max-width: 768px) {
+            aside {
+                display: none;
+            }
+            main {
+                margin-left: 0;
+                padding: 1rem;
+            }
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .search-bar {
+                max-width: 100%;
+            }
+            .theater-stage {
+                width: 98%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-layout">
+        <!-- Structural Sidebar System -->
+        <aside>
+            <div class="brand">🎮 Nexus<span>Arcade</span></div>
+            <ul class="nav-menu">
+                <li class="nav-item active" onclick="filterCategory('all', this)">🌐 All Libraries</li>
+                <li class="nav-item" onclick="filterCategory('action', this)">⚔️ Action / Speed</li>
+                <li class="nav-item" onclick="filterCategory('puzzle', this)">🧩 Logic & Strategy</li>
+                <li class="nav-item" onclick="filterCategory('retro', this)">👾 Retro Classics</li>
+            </ul>
+        </aside>
+
+        <!-- Main Viewport Arena -->
+        <main>
+            <header>
+                <div class="search-bar">
+                    <input type="text" id="searchEl" placeholder="Search unblocked game titles..." oninput="handleSearch()">
+                </div>
+                <div class="stats-counter" id="indexerCount">Indexing: 0 Titles</div>
+            </header>
+
+            <section class="game-grid" id="gridEl">
+                <!-- Data injection point -->
+            </section>
+        </main>
+    </div>
+
+    <!-- Gameplay Overlay Stage Window -->
+    <div class="modal-overlay" id="modalEl">
+        <div class="theater-stage">
+            <div class="stage-header">
+                <div class="stage-title" id="stageTitleEl">Game Engine Viewer</div>
+                <div class="stage-controls">
+                    <button class="control-btn" onclick="toggleFullscreen()">📺 Max Fullscreen</button>
+                    <button class="control-btn close" onclick="closeStageWindow()">✕ Close Stage</button>
+                </div>
+            </div>
+            <div class="screen-container">
+                <div class="frame-loader" id="loaderEl">
+                    <div class="spinner"></div>
+                    <p style="color: var(--text-muted); font-size: 0.875rem;">Initializing runtime environments...</p>
+                </div>
+                <iframe id="iframeEl" src="" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Comprehensive Verified CDN/GitHub Hosted Games Manifest Directory
+         * Filter tags explicitly track classifications mapping array nodes to view states.
+         */
+        const gamesManifest = [
+            { title: "2048 Engine", desc: "Merge numeric matching blocks mathematically via swipe parameters to reach the elusive 2048 tile payload.", category: "puzzle", emoji: "🔢", url: "https://gabrielecirulli.github.io/2048/" },
+            { title: "Hextris Logic", desc: "A fast-paced structural matching puzzle execution inspired by Tetris over a circular hexagonal vector base layout.", category: "puzzle", emoji: "🔷", url: "https://hextris.io/" },
+            { title: "Clumsy Bird V2", desc: "Navigate horizontal flight mechanics through complex structural pipeline matrices safely.", category: "action", emoji: "🐦", url: "https://ellisonleao.github.io/clumsy-bird/" },
+            { title: "Canvas Breakout", desc: "Pure arcade retro classic execution built completely leveraging native vanilla HTML5 Canvas 2D render components.", category: "retro", emoji: "🧱", url: "https://mdn.github.io/2d-breakout-game/" },
+            { title: "Classic Snake", desc: "Retro mobile arcade simulation matrix tracking vector grid growth calculations while optimizing payload capture routes.", category: "retro", emoji: "🐍", url: "https://thegpx.github.io/bSnake/" },
+            { title: "Canvas Tetris", desc: "Classic block stacking and row completion puzzle game featuring clean geometry rendering.", category: "puzzle", emoji: "🕹️", url: "https://dionyziz.github.io/canvas-tetris/" },
+            { title: "Doodle Jump HTML5", desc: "Infinity jumping layout tracking spatial platforms upward while escaping bottom frame cullings.", category: "action", emoji: "🚀", url: "https://andmarios.github.io/doodlejump/" },
+            { title: "Pacman Canvas", desc: "Waka waka retro navigation logic across maze arrays while calculating ghost movement tracking algorithm structures.", category: "retro", emoji: "🟡", url: "https://mumuy.github.io/pacman/" },
+            { title: "Tic-Tac-Toe Pro", desc: "Strategic turn-based algorithmic grid layout testing programmatic competitive logic matrix configurations.", category: "puzzle", emoji: "❌", url: "https://copypasteearth.github.io/Tic-Tac-Toe/" },
+            { title: "Type Racer Lite", desc: "Enhance your keystroke output velocity matrices processing rapid lexical characters in continuous streams.", category: "action", emoji: "⌨️", url: "https://thetypingcat.com/" },
+            { title: "Minesweeper JS", desc: "Locate hidden volatile coordinates inside cell grid structures parsing numeric vicinity algorithms.", category: "puzzle", emoji: "💣", url: "https://jakesgordon.github.io/javascript-minesweeper/" },
+            { title: "Speed Racer", desc: "Pseudo-3D driving retro simulation executing continuous horizon transformations and scaling projection systems.", category: "action", emoji: "🏎️", url: "https://codeincodeblock.github.io/3d-racer/" }
+        ];
+
+        let currentActiveCategory = "all";
+        let targetedQuery = "";
+
+        const gridEl = document.getElementById("gridEl");
+        const countEl = document.getElementById("indexerCount");
+        const modalEl = document.getElementById("modalEl");
+        const iframeEl = document.getElementById("iframeEl");
+        const stageTitleEl = document.getElementById("stageTitleEl");
+        const loaderEl = document.getElementById("loaderEl");
+
+        /** Renders filtered content maps into UI nodes */
+        function renderMatrix() {
+            gridEl.innerHTML = "";
+            
+            const datasets = gamesManifest.filter(game => {
+                const categoryPass = currentActiveCategory === "all" || game.category === currentActiveCategory;
+                const searchPass = game.title.toLowerCase().includes(targetedQuery) || game.desc.toLowerCase().includes(targetedQuery);
+                return categoryPass && searchPass;
+            });
+
+            countEl.textContent = `Indexing: ${datasets.length} Title${datasets.length !== 1 ? 's' : ''}`;
+
+            if(datasets.length === 0) {
+                gridEl.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 4rem 0;">No unblocked files map your active filter parameters.</div>`;
+                return;
+            }
+
+            datasets.forEach(game => {
+                const card = document.createElement("article");
+                card.className = "game-card";
+                card.innerHTML = `
+                    <div class="game-hero">
+                        ${game.emoji}
+                        <span class="game-tag">${game.category}</span>
+                    </div>
+                    <div class="game-body">
+                        <h3 class="game-title">${game.title}</h3>
+                        <p class="game-description">${game.desc}</p>
+                        <button class="game-action" onclick="launchGameEngine('${game.url}', '${game.title}')">Execute Engine</button>
+                    </div>
+                `;
+                gridEl.appendChild(card);
+            });
+        }
+
+        function handleSearch() {
+            targetedQuery = document.getElementById("searchEl").value.toLowerCase();
+            renderMatrix();
+        }
+
+        function filterCategory(category, element) {
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            currentActiveCategory = category;
+            renderMatrix();
+        }
+
+        function launchGameEngine(url, title) {
+            loaderEl.style.opacity = "1";
+            loaderEl.style.display = "flex";
+            stageTitleEl.textContent = title;
+            iframeEl.src = url;
+            modalEl.style.display = "flex";
+
+            // Event observer intercepting iframe load complete states
+            iframeEl.onload = () => {
+                loaderEl.style.opacity = "0";
+                setTimeout(() => loaderEl.style.display = "none", 300);
+            };
+        }
+
+        function closeStageWindow() {
+            modalEl.style.display = "none";
+            iframeEl.src = "";
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                iframeEl.requestFullscreen().catch(err => {
+                    alert(`Fullscreen pipeline exception error encountered: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Initialize runtime sequence
+        window.addEventListener("DOMContentLoaded", renderMatrix);
+    </script>
+</body>
+</html>
